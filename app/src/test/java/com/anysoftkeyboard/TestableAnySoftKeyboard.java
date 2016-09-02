@@ -20,6 +20,7 @@ import com.anysoftkeyboard.keyboards.KeyboardAddOnAndBuilder;
 import com.anysoftkeyboard.keyboards.KeyboardSwitcher;
 import com.anysoftkeyboard.keyboards.views.AnyKeyboardView;
 import com.anysoftkeyboard.keyboards.views.CandidateView;
+import com.anysoftkeyboard.quicktextkeys.TagsExtractor;
 import com.menny.android.anysoftkeyboard.R;
 import com.menny.android.anysoftkeyboard.SoftKeyboard;
 
@@ -55,6 +56,11 @@ public class TestableAnySoftKeyboard extends SoftKeyboard {
     public void onCreate() {
         super.onCreate();
         mSpiedInputMethodManager = Mockito.spy(super.getInputMethodManager());
+    }
+
+    @Override
+    public TagsExtractor getQuickTextTagsSearcher() {
+        return super.getQuickTextTagsSearcher();
     }
 
     @Override

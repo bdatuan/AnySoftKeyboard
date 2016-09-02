@@ -15,6 +15,7 @@ import java.util.List;
 public class TagsExtractorTest {
 
     private List<Keyboard.Key> mKeysForTest;
+    private List<Keyboard.Key> mKeysForTest2;
     private TagsExtractor mUnderTest;
 
     @Before
@@ -35,19 +36,36 @@ public class TagsExtractorTest {
         Mockito.doReturn(Arrays.asList("plane")).when((AnyKeyboard.AnyKey) mKeysForTest.get(2)).getKeyTags();
         Mockito.doReturn(Arrays.asList("face", "shrug")).when((AnyKeyboard.AnyKey) mKeysForTest.get(3)).getKeyTags();
 
-        mUnderTest = new TagsExtractor(mKeysForTest);
+        mKeysForTest2 = new ArrayList<>();
+        mKeysForTest2.add(Mockito.mock(AnyKeyboard.AnyKey.class));
+        mKeysForTest2.add(Mockito.mock(AnyKeyboard.AnyKey.class));
+        mKeysForTest2.add(Mockito.mock(AnyKeyboard.AnyKey.class));
+        mKeysForTest2.add(Mockito.mock(AnyKeyboard.AnyKey.class));
+
+        mKeysForTest2.get(0).text = "CAR";
+        mKeysForTest2.get(1).text = "HAPPY";
+        mKeysForTest2.get(2).text = "PALM";
+        mKeysForTest2.get(3).text = "FACE";
+
+        Mockito.doReturn(Arrays.asList("car", "vehicle")).when((AnyKeyboard.AnyKey) mKeysForTest2.get(0)).getKeyTags();
+        Mockito.doReturn(Arrays.asList("person", "face", "happy")).when((AnyKeyboard.AnyKey) mKeysForTest2.get(1)).getKeyTags();
+        Mockito.doReturn(Arrays.asList("tree", "palm")).when((AnyKeyboard.AnyKey) mKeysForTest2.get(2)).getKeyTags();
+        Mockito.doReturn(Arrays.asList("face")).when((AnyKeyboard.AnyKey) mKeysForTest2.get(3)).getKeyTags();
+
+        mUnderTest = new TagsExtractor(Arrays.asList(mKeysForTest, mKeysForTest2));
     }
 
     @Test
     public void getOutputForTag() throws Exception {
         Assert.assertEquals(1, mUnderTest.getOutputForTag("happy").size());
-        Assert.assertArrayEquals(new String[]{"HAPPY"}, mUnderTest.getOutputForTag("happy").toArray());
+        Assert.assertArrayEquals(new String[]{"HAPPY", "HAPPY"}, mUnderTest.getOutputForTag("happy").toArray());
+        Assert.assertArrayEquals(new String[]{"PALM"}, mUnderTest.getOutputForTag("palm").toArray());
     }
 
     @Test
     public void getMultipleOutputsForTag() throws Exception {
         Assert.assertEquals(2, mUnderTest.getOutputForTag("face").size());
-        Assert.assertArrayEquals(new String[]{"HAPPY", "SHRUG"}, mUnderTest.getOutputForTag("face").toArray());
+        Assert.assertArrayEquals(new String[]{"HAPPY", "SHRUG", "HAPPY", "FACE"}, mUnderTest.getOutputForTag("face").toArray());
     }
 
     @Test

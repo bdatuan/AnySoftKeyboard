@@ -53,6 +53,10 @@ public abstract class AnySoftKeyboardBaseTest {
         spiedSuggest.setSuggestionsForWord("he", "he'll", "hell", "hello");
         spiedSuggest.setSuggestionsForWord("hel", "hell", "hello");
         spiedSuggest.setSuggestionsForWord("hell", "hell", "hello");
+        spiedSuggest.setSuggestionsForWord("f", "face");
+        spiedSuggest.setSuggestionsForWord("fa", "face");
+        spiedSuggest.setSuggestionsForWord("fac", "face");
+        spiedSuggest.setSuggestionsForWord("face", "face");
 
         Mockito.reset(spiedSuggest);
 
@@ -94,13 +98,13 @@ public abstract class AnySoftKeyboardBaseTest {
         return TestableAnySoftKeyboard.createEditorInfoTextWithSuggestions();
     }
 
-    protected final void verifyNoSuggestionsInteractions(CandidateView candidateView) {
-        Mockito.verify(candidateView, Mockito.never()).setSuggestions(Mockito.anyList(), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyBoolean());
+    protected final void verifyNoSuggestionsInteractions() {
+        Mockito.verify(mSpiedCandidateView, Mockito.never()).setSuggestions(Mockito.anyList(), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyBoolean());
     }
 
-    protected final void verifySuggestions(CandidateView candidateView, boolean resetCandidateView, CharSequence... expectedSuggestions) {
+    protected final void verifySuggestions(boolean resetCandidateView, CharSequence... expectedSuggestions) {
         ArgumentCaptor<List> suggestionsCaptor = ArgumentCaptor.forClass(List.class);
-        Mockito.verify(candidateView, Mockito.atLeastOnce()).setSuggestions(suggestionsCaptor.capture(), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyBoolean());
+        Mockito.verify(mSpiedCandidateView, Mockito.atLeastOnce()).setSuggestions(suggestionsCaptor.capture(), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyBoolean());
         List<List> allValues = suggestionsCaptor.getAllValues();
         List actualSuggestions = allValues.get(allValues.size() - 1);
         if (expectedSuggestions.length == 0) {

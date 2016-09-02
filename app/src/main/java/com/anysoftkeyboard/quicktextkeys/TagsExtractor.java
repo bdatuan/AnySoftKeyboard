@@ -14,14 +14,16 @@ public class TagsExtractor {
 
     private final ArrayMap<String, List<CharSequence>> mTagsForOutputs = new ArrayMap<>();
 
-    public TagsExtractor(@NonNull List<Keyboard.Key> keys) {
-        for (Keyboard.Key key : keys) {
-            AnyKeyboard.AnyKey anyKey = (AnyKeyboard.AnyKey) key;
-            for (String tag : anyKey.getKeyTags()) {
-                if (!mTagsForOutputs.containsKey(tag))
-                    mTagsForOutputs.put(tag, new ArrayList<CharSequence>());
-                mTagsForOutputs.get(tag).add(anyKey.text);
+    public TagsExtractor(@NonNull List<List<Keyboard.Key>> listsOfKeys) {
+        for (List<Keyboard.Key> keys : listsOfKeys) {
+            for (Keyboard.Key key : keys) {
+                AnyKeyboard.AnyKey anyKey = (AnyKeyboard.AnyKey) key;
+                for (String tag : anyKey.getKeyTags()) {
+                    if (!mTagsForOutputs.containsKey(tag))
+                        mTagsForOutputs.put(tag, new ArrayList<CharSequence>());
+                    mTagsForOutputs.get(tag).add(anyKey.text);
 
+                }
             }
         }
     }

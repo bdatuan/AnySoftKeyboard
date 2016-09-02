@@ -16,6 +16,10 @@
 
 package com.anysoftkeyboard.base.dictionaries;
 
+import android.support.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +28,12 @@ import java.util.List;
  * A place to store the currently composing word with information such as adjacent key codes as well
  */
 public class WordComposer {
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef()
+    public @interface WordSuggestionType {}
+    public static final int WORDS = 1;
+    public static final int TAGS = 2;
+
     public static final int NOT_A_KEY_INDEX = -1;
     /**
      * The list of unicode values for each keystroke (including surrounding keys)
@@ -48,6 +58,9 @@ public class WordComposer {
 
     private boolean mAutoCapitalized;
 
+    @WordSuggestionType
+    private int mSuggestionType = WORDS;
+
     /**
      * Whether the user chose to capitalize the first char of the word.
      */
@@ -70,6 +83,7 @@ public class WordComposer {
         mTypedWord.setLength(0);
         mCapsCount = 0;
         mCursorPosition = 0;
+        mSuggestionType = WORDS;
     }
 
     /**
@@ -292,5 +306,14 @@ public class WordComposer {
             }
         }
         return stringBuilder.toString();
+    }
+
+    public void setWordSuggestionType(@WordSuggestionType int suggestionType) {
+        mSuggestionType = suggestionType;
+    }
+
+    @WordComposer.WordSuggestionType
+    public int getWordSuggestionType() {
+        return mSuggestionType;
     }
 }
